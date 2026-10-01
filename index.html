@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0f17">
+
+<title>10 Week Cut | Training</title>
+
+<style>
+:root {
+  --bg:#0b0f17;
+  --card:#151b26;
+  --card2:#1d2533;
+  --text:#f7f8fa;
+  --muted:#98a2b3;
+  --accent:#76e6b5;
+  --accent2:#55cfa0;
+  --border:#293241;
+  --danger:#ff7b7b;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding-bottom:100px;
+}
+
+header {
+  padding:calc(25px + env(safe-area-inset-top)) 20px 15px;
+  background:linear-gradient(180deg,#121925,var(--bg));
+}
+
+h1 {
+  margin:4px 0;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.subtitle {
+  color:var(--muted);
+  font-size:14px;
+}
+
+.container {
+  max-width:700px;
+  margin:auto;
+  padding:10px 15px;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.top-controls {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+select, input, textarea, button {
+  width:100%;
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:11px;
+  font-size:16px;
+}
+
+label {
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.exercise {
+  margin-bottom:14px;
+}
+
+.exercise-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:5px;
+}
+
+.exercise h3 {
+  margin:0;
+  font-size:17px;
+}
+
+.target {
+  color:var(--accent);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.previous {
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.set-row {
+  display:grid;
+  grid-template-columns:35px 1fr 1fr 45px;
+  gap:7px;
+  align-items:center;
+  margin-bottom:7px;
+}
+
+.set-number {
+  font-weight:700;
+  color:var(--muted);
+  text-align:center;
+}
+
+.done {
+  height:42px;
+  padding:0;
+  font-size:18px;
+}
+
+.done.completed {
+  background:var(--accent);
+  color:#07120e;
+}
+
+.progress-wrap {
+  height:8px;
+  background:var(--card2);
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress-bar {
+  height:100%;
+  background:var(--accent);
+  width:0%;
+  transition:.25s;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  text-align:center;
+}
+
+.stat {
+  background:var(--card2);
+  padding:10px 5px;
+  border-radius:12px;
+}
+
+.stat strong {
+  display:block;
+  font-size:19px;
+}
+
+.stat span {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.timer {
+  text-align:center;
+}
+
+.timer-display {
+  font-size:38px;
+  font-weight:700;
+  margin:8px;
+}
+
+.timer-buttons {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.primary {
+  background:var(--accent);
+  color:#07120e;
+  font-weight:700;
+}
+
+.secondary {
+  background:var(--card2);
+}
+
+.notes {
+  min-height:80px;
+  resize:vertical;
+}
+
+footer {
+  color:var(--muted);
+  text-align:center;
+  font-size:11px;
+  margin-top:25px;
+}
+
+.backup {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+#fileInput { display:none; }
+
+@media(max-width:420px) {
+  .set-row {
+    grid-template-columns:28px 1fr 1fr 42px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="subtitle">10 WEEK CUT • TRAINING BLOCK</div>
+  <h1>Workout Tracker</h1>
+  <div class="subtitle">Train hard. Keep the muscle. Get lean.</div>
+</header>
+
+<div class="container">
+
+<div class="card top-controls">
+  <div>
+    <label>WEEK</label>
+    <select id="weekSelect"></select>
+  </div>
+  <div>
+    <label>WORKOUT</label>
+    <select id="daySelect"></select>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stats">
+    <div class="stat">
+      <strong id="setsDone">0</strong>
+      <span>SETS DONE</span>
+    </div>
+    <div class="stat">
+      <strong id="totalSets">0</strong>
+      <span>TOTAL SETS</span>
+    </div>
+    <div class="stat">
+      <strong id="percentage">0%</strong>
+      <span>COMPLETE</span>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</div>
+
+<div id="workout"></div>
+
+<div class="card">
+  <label>WORKOUT NOTES</label>
+  <textarea
+    class="notes"
+    id="notes"
+    placeholder="Energy, performance, aches, PBs..."
+  ></textarea>
+</div>
+
+<div class="card timer">
+  <label>REST TIMER</label>
+  <div class="timer-display" id="timer">00:00</div>
+  <div class="timer-buttons">
+    <button onclick="startTimer(60)">60 sec</button>
+    <button onclick="startTimer(90)">90 sec</button>
+    <button onclick="startTimer(180)">3 min</button>
+  </div>
+</div>
+
+<div class="card">
+  <label>DATA BACKUP</label>
+  <div class="backup">
+    <button class="secondary" onclick="exportData()">Export</button>
+    <button class="secondary" onclick="document.getElementById('fileInput').click()">Import</button>
+  </div>
+  <input type="file" id="fileInput" accept=".json">
+</div>
+
+<footer>
+Your training data is stored locally on this device.
+</footer>
+
+</div>
+
+<script>
+const programme = {
+  "Upper A": [
+    ["Incline Barbell Bench Press",3,"5–8","1–2 RIR"],
+    ["Chest-Supported T-Bar Row",3,"6–10","1–2 RIR"],
+    ["Neutral-Grip Lat Pulldown",2,"8–12","0–1 RIR"],
+    ["Cable Lateral Raise",2,"12–20","0–1 RIR"],
+    ["EZ-Bar Preacher Curl",2,"8–12","0–1 RIR"],
+    ["Cable Triceps Pushdown",2,"8–12","0–1 RIR"]
+  ],
+
+  "Legs": [
+    ["Hack Squat",3,"6–10","1–2 RIR"],
+    ["Romanian Deadlift",3,"6–10","1–2 RIR"],
+    ["Bulgarian Split Squat",2,"8–12","0–1 RIR"],
+    ["Seated Leg Curl",2,"8–12","0–1 RIR"],
+    ["Leg Extension",2,"10–15","0–1 RIR"],
+    ["Standing Calf Raise",2,"10–15","0–1 RIR"]
+  ],
+
+  "Upper B": [
+    ["Weighted Chin-Up",3,"5–8","1–2 RIR"],
+    ["Seated Dumbbell Shoulder Press",3,"6–10","1–2 RIR"],
+    ["Machine Chest Press",2,"8–12","0–1 RIR"],
+    ["Machine/Cable Lateral Raise",2,"12–20","0–1 RIR"],
+    ["Incline Dumbbell Curl",2,"8–12","0–1 RIR"],
+    ["Overhead Cable Triceps Extension",2,"10–15","0–1 RIR"]
+  ],
+
+  "Delts & Arms": [
+    ["Close-Grip Bench Press",3,"6–10","1–2 RIR"],
+    ["Chest-Supported Machine Row",3,"8–12","1–2 RIR"],
+    ["Cable Lateral Raise",3,"12–20","0–1 RIR"],
+    ["Bayesian Cable Curl",2,"10–15","0–1 RIR"],
+    ["Cable Triceps Extension",2,"10–15","0–1 RIR"],
+    ["Hammer Curl",1,"10–15","Failure"],
+    ["Single-Arm Pushdown",1,"10–15","Failure"]
+  ]
+};
+
+let data = JSON.parse(localStorage.getItem("workoutDataV2") || "{}");
+
+const weekSelect = document.getElementById("weekSelect");
+const daySelect = document.getElementById("daySelect");
+
+for(let i=1;i<=10;i++){
+  weekSelect.innerHTML += `<option value="${i}">Week ${i}</option>`;
+}
+
+Object.keys(programme).forEach(day=>{
+  daySelect.innerHTML += `<option>${day}</option>`;
+});
+
+function key(){
+  return `w${weekSelect.value}-${daySelect.value}`;
+}
+
+function save(){
+  localStorage.setItem("workoutDataV2",JSON.stringify(data));
+}
+
+function render(){
+  const week = Number(weekSelect.value);
+  const day = daySelect.value;
+  const exercises = programme[day];
+  const container = document.getElementById("workout");
+
+  if(!data[key()]) data[key()] = {exercises:{},notes:""};
+
+  container.innerHTML = "";
+
+  exercises.forEach((ex,ei)=>{
+    const [name,sets,reps,rir] = ex;
+
+    if(!data[key()].exercises[ei])
+      data[key()].exercises[ei] = [];
+
+    let previousText = "No previous-week data";
+
+    if(week > 1){
+      const previousKey = `w${week-1}-${day}`;
+      const previous = data[previousKey]?.exercises?.[ei];
+
+      if(previous?.length){
+        previousText = "Last week: " +
+          previous.map((s,i)=>
+            `S${i+1} ${s.weight || "–"}kg × ${s.reps || "–"}`
+          ).join(" • ");
+      }
+    }
+
+    let rows = "";
+
+    for(let s=0;s<sets;s++){
+      const setData =
+        data[key()].exercises[ei][s] ||
+        {weight:"",reps:"",done:false};
+
+      rows += `
+      <div class="set-row">
+        <div class="set-number">${s+1}</div>
+
+        <input
+          type="number"
+          inputmode="decimal"
+          placeholder="kg"
+          value="${setData.weight}"
+          onchange="updateSet(${ei},${s},'weight',this.value)"
+        >
+
+        <input
+          type="number"
+          inputmode="numeric"
+          placeholder="reps"
+          value="${setData.reps}"
+          onchange="updateSet(${ei},${s},'reps',this.value)"
+        >
+
+        <button
+          class="done ${setData.done?'completed':''}"
+          onclick="toggleDone(${ei},${s})"
+        >✓</button>
+      </div>`;
+    }
+
+    container.innerHTML += `
+    <div class="card exercise">
+      <div class="exercise-title">
+        <h3>${name}</h3>
+        <div class="target">${sets} × ${reps}<br>${rir}</div>
+      </div>
+      <div class="previous">${previousText}</div>
+      ${rows}
+    </div>`;
+  });
+
+  document.getElementById("notes").value =
+    data[key()].notes || "";
+
+  updateStats();
+  save();
+}
+
+function updateSet(ex,set,field,value){
+  if(!data[key()].exercises[ex][set])
+    data[key()].exercises[ex][set] =
+      {weight:"",reps:"",done:false};
+
+  data[key()].exercises[ex][set][field] = value;
+  save();
+}
+
+function toggleDone(ex,set){
+  if(!data[key()].exercises[ex][set])
+    data[key()].exercises[ex][set] =
+      {weight:"",reps:"",done:false};
+
+  data[key()].exercises[ex][set].done =
+    !data[key()].exercises[ex][set].done;
+
+  save();
+  render();
+}
+
+function updateStats(){
+  let total=0,done=0;
+
+  programme[daySelect.value].forEach((ex,ei)=>{
+    total += ex[1];
+
+    for(let s=0;s<ex[1];s++){
+      if(data[key()]?.exercises?.[ei]?.[s]?.done)
+        done++;
+    }
+  });
+
+  const pct = total ?
+    Math.round(done/total*100) : 0;
+
+  document.getElementById("setsDone").textContent=done;
+  document.getElementById("totalSets").textContent=total;
+  document.getElementById("percentage").textContent=pct+"%";
+  document.getElementById("progressBar").style.width=pct+"%";
+}
+
+document.getElementById("notes").addEventListener("input",e=>{
+  data[key()].notes=e.target.value;
+  save();
+});
+
+weekSelect.onchange=render;
+daySelect.onchange=render;
+
+/* TIMER */
+
+let timerInterval;
+
+function startTimer(seconds){
+  clearInterval(timerInterval);
+
+  let remaining=seconds;
+
+  function draw(){
+    const min=Math.floor(remaining/60);
+    const sec=remaining%60;
+
+    document.getElementById("timer").textContent =
+      `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+  }
+
+  draw();
+
+  timerInterval=setInterval(()=>{
+    remaining--;
+    draw();
+
+    if(remaining<=0){
+      clearInterval(timerInterval);
+      if(navigator.vibrate) navigator.vibrate(200);
+    }
+  },1000);
+}
+
+/* BACKUP */
+
+function exportData(){
+  const blob=new Blob(
+    [JSON.stringify(data,null,2)],
+    {type:"application/json"}
+  );
+
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="workout-backup.json";
+  a.click();
+}
+
+document.getElementById("fileInput")
+.addEventListener("change",function(e){
+  const file=e.target.files[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=function(){
+    try{
+      data=JSON.parse(reader.result);
+      save();
+      render();
+      alert("Workout data imported.");
+    }catch{
+      alert("That backup file could not be read.");
+    }
+  };
+
+  reader.readAsText(file);
+});
+
+render();
+</script>
+
+</body>
+</html>
